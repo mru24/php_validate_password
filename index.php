@@ -35,6 +35,10 @@ class CheckPassword {
     $number = preg_match('@[0-9]@', $password);
     $specialChars = preg_match('@[^\w]@', $password);
 
+    if(!$password) {
+      $this->error = "ENTER PASSWORD";
+      return false;
+    }
     if(!$uppercase) {
       $this->error = "UPPERCASE";
       return false;
