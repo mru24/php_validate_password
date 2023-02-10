@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>HTML PHP TEST</title>
+  </head>
+  <body>
+    <div style="padding: 90px;">
+      <form class="" action="index.php" method="post">
+        <input type="text" name="password" value="" class="passwordInput">
+        <input type="submit" name="submit" value="submit">
+      </form>
+    </div>
+  </body>
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+  <script>
+  // if(isset($_POST['submit'])) {
+  //   $check = new CheckPassword();
+  //   $password = $_POST['password'];
+  //
+  //   if($check->validatePassword($password)) {
+  //     echo 'Strong password.';
+  //   } else {
+  //     $error = $check->getError();
+  //     echo '<h1>'.$error.'</h1>';
+  //   }
+  // }
+
+  class App {
+    async init() {
+      console.log("App OK");
+      this.jq = jQuery;
+      this.passInput = this.jq('.passwordInput');
+      this.passStatus = false;
+      this.passMessage = [];
+
+      this.passInput.length>0?this.initValidatePassword(this.passInput):'';
+
+      console.log();
+    }
+    async initValidatePassword(el) {
+      console.log("password validation started",el);
+      this.jq('<div class="passMessage"></div>').insertAfter(el);
+      el.on('keyup',()=>{
+        if(this.validatePassword(el.val())) {
+          console.log(this.passMessage);
+          this.jq('.passMessage').html(this.passMessage);
+        };
+      });
+    }
+    async validatePassword(password) {
+      this.passMessage = ['<span class="success">Password OK</span>'];
+      if(password.length < 8) {
+        this.passMessage = [];
+        this.passMessage.push('<span class="fail">MUST BE MINIMUM 8 CHARS</span>');
+      }
+      if(!/[A-Z]/.test(password)) {
+        this.passMessage = [];
+        this.passMessage.push('<span class="fail">MUST BE UPPERCASE</span>');
+      }
+      if(!/[a-z]/.test(password)) {
+        this.passMessage = [];
+        this.passMessage.push('<span class="fail">MUST BE LOWERCASE</span>');
+      }
+      if(!/[0-9]/.test(password)) {
+        this.passMessage = [];
+        this.passMessage.push('<span class="fail">MUST BE NUMBER</span>');
+      }
+      if(!/[@$!%*?&]/.test(password)) {
+        this.passMessage = [];
+        this.passMessage.push('<span class="fail">MUST BE SPECIAL CHAR</span>');
+      }
+      return this.passMessage;
+    }
+    async getError() {
+      return this.passError;
+    }
+  }
+  var app = new App();
+  app.init();
+  </script>
+</html>
